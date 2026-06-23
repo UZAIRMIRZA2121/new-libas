@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - New Libas</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <!-- Simplified Header for Checkout -->
+    <header class="header checkout-header">
+        <div class="container header-main">
+            <div class="logo">
+                <a href="index.html">
+                    <h1>New<span>Libas</span></h1>
+                </a>
+            </div>
+            <div class="checkout-secure-badge">
+                <i class="fas fa-lock"></i> Secure Checkout
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <div class="checkout-layout">
+            
+            <!-- Left: Checkout Forms -->
+            <div class="checkout-form-section">
+                
+                <div class="checkout-step">
+                    <div class="step-header">
+                        <h3>1. Contact Information</h3>
+                        <p>Already have an account? <a href="#" class="text-primary">Log in</a></p>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Email Address" class="form-control" required>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="news-updates">
+                        <label for="news-updates">Email me with news and offers</label>
+                    </div>
+                </div>
+
+                <div class="checkout-step">
+                    <div class="step-header">
+                        <h3>2. Shipping Address</h3>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <input type="text" placeholder="First Name" class="form-control" required>
+                        </div>
+                        <div class="form-group half-width">
+                            <input type="text" placeholder="Last Name" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Address" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Apartment, suite, etc. (optional)" class="form-control">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <input type="text" placeholder="City" class="form-control" required>
+                        </div>
+                        <div class="form-group half-width">
+                            <input type="text" placeholder="Postal code" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" placeholder="Phone" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="checkout-step">
+                    <div class="step-header">
+                        <h3>3. Payment Method</h3>
+                        <p>All transactions are secure and encrypted.</p>
+                    </div>
+                    
+                    <div class="payment-methods-list">
+                        <!-- Card Payment -->
+                        <div class="payment-option">
+                            <input type="radio" name="payment" id="pay-card" checked>
+                            <label for="pay-card" class="payment-label">
+                                <span>Credit / Debit Card</span>
+                                <div class="card-icons">
+                                    <i class="fab fa-cc-visa"></i>
+                                    <i class="fab fa-cc-mastercard"></i>
+                                </div>
+                            </label>
+                            <div class="payment-details">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Card number" class="form-control">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group half-width">
+                                        <input type="text" placeholder="Expiration date (MM / YY)" class="form-control">
+                                    </div>
+                                    <div class="form-group half-width">
+                                        <input type="text" placeholder="Security code" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" placeholder="Name on card" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- COD Payment -->
+                        <div class="payment-option">
+                            <input type="radio" name="payment" id="pay-cod">
+                            <label for="pay-cod" class="payment-label">
+                                <span>Cash on Delivery (COD)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-actions">
+                    <a href="cart.html" class="back-link"><i class="fas fa-chevron-left"></i> Return to cart</a>
+                    <button class="btn-checkout-primary">Pay Rs.9,398.00</button>
+                </div>
+
+            </div>
+
+            <!-- Right: Order Summary -->
+            <div class="checkout-summary-section">
+                <div class="order-summary-box">
+                    
+                    <div class="summary-items">
+                        <!-- Item 1 -->
+                        <div class="summary-item">
+                            <div class="summary-item-img">
+                                <img src="https://images.unsplash.com/photo-1583391733958-650fac5eb367?w=100&q=80" alt="Product">
+                                <span class="summary-qty-badge">1</span>
+                            </div>
+                            <div class="summary-item-info">
+                                <h4>2 Pc Bed Spread Plain Dyed - Peach</h4>
+                                <span>6 PCS KING COMFORTER SET</span>
+                            </div>
+                            <div class="summary-item-price">
+                                Rs.1,699.00
+                            </div>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="summary-item">
+                            <div class="summary-item-img">
+                                <img src="https://images.unsplash.com/photo-1550639525-c97d455acf70?w=100&q=80" alt="Product">
+                                <span class="summary-qty-badge">1</span>
+                            </div>
+                            <div class="summary-item-info">
+                                <h4>3PC Embroidered Unstitched Lawn Suit</h4>
+                                <span>Cavern Pink</span>
+                            </div>
+                            <div class="summary-item-price">
+                                Rs.7,699.00
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="discount-code-input">
+                        <input type="text" placeholder="Discount code or gift card">
+                        <button class="btn-apply">Apply</button>
+                    </div>
+
+                    <div class="summary-totals">
+                        <div class="summary-line">
+                            <span>Subtotal</span>
+                            <span>Rs.9,398.00</span>
+                        </div>
+                        <div class="summary-line">
+                            <span>Shipping</span>
+                            <span class="free-shipping">Free</span>
+                        </div>
+                        <div class="summary-line total-line">
+                            <span>Total</span>
+                            <span class="total-price">Rs.9,398.00 <span class="currency">PKR</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Simplified Footer -->
+    <footer class="checkout-footer">
+        <div class="container">
+            <p>&copy; 2026 New Libas. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Refund policy</a>
+                <a href="#">Shipping policy</a>
+                <a href="#">Privacy policy</a>
+                <a href="#">Terms of service</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
