@@ -78,13 +78,39 @@
                     @if($product->images->count() > 0)
                         <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
                         @foreach($product->images as $img)
-                            <img src="{{ asset('storage/' . $img->image_path) }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                            <div style="position: relative; display: inline-block;" id="gallery-image-{{ $img->id }}">
+                                <img src="{{ asset('storage/' . $img->image_path) }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                                <button type="button" onclick="deleteGalleryImage({{ $img->id }})" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 16px; height: 16px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">&times;</button>
+                            </div>
                         @endforeach
                         </div>
                     @endif
                     <input type="file" name="gallery[]" accept="image/*" multiple style="width: 100%; padding: 0.8rem; border: 1px dashed var(--border-color); border-radius: 8px; background: #f8fafc;">
                     <small style="color: var(--text-muted); display: block; margin-top: 0.3rem;">Upload new images to add to the gallery.</small>
                 </div>
+
+                <script>
+                    function deleteGalleryImage(id) {
+                        if (confirm('Are you sure you want to delete this image?')) {
+                            fetch(`{{ url('admin/product-images') }}/${id}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    document.getElementById('gallery-image-' + id).remove();
+                                } else {
+                                    alert('Error deleting image');
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                        }
+                    }
+                </script>
 
                 <div style="margin-bottom: 1.5rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
                     <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Product Colors</label>

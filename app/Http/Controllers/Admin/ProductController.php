@@ -201,4 +201,17 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
     }
+
+    public function deleteImage($id)
+    {
+        $image = \App\Models\ProductImage::findOrFail($id);
+        
+        if ($image->image_path) {
+            Storage::disk('public')->delete($image->image_path);
+        }
+        
+        $image->delete();
+
+        return response()->json(['success' => true, 'message' => 'Image deleted successfully']);
+    }
 }
