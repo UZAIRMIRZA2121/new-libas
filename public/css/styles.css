@@ -1928,7 +1928,7 @@ ul {
         white-space: nowrap;
     }
     .product-grid, .deals-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
     .hero-banner {
         height: 250px;
