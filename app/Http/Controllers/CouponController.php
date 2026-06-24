@@ -20,23 +20,11 @@ class CouponController extends Controller
 
         $email = $request->email;
 
-        // Check if email already claimed a coupon
-        $existing = Coupon::where('email', $email)->first();
-        if ($existing) {
-            return response()->json([
-                'success' => true, 
-                'message' => 'You already have a coupon!', 
-                'code' => $existing->code
-            ]);
-        }
-
-        // Create new coupon
-        $coupon = Coupon::create([
-            'email' => $email,
-            'code' => 'FIRSTORDER15',
-            'discount_percentage' => 15,
-            'is_used' => false
-        ]);
+        // Find or create the generic welcome coupon
+        $coupon = Coupon::firstOrCreate(
+            ['code' => 'FIRSTORDER15'],
+            ['discount_percentage' => 15]
+        );
 
         return response()->json([
             'success' => true,

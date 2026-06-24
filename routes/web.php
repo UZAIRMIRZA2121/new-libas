@@ -28,6 +28,9 @@ Route::post('/subscribe-coupon', [\App\Http\Controllers\CouponController::class,
 Route::get('/cart', [PageController::class, 'cart'])->name('cart');
 Route::get('/track-order', [PageController::class, 'trackOrder'])->name('track.order');
 
+// Tracking API
+Route::post('/track-activity', [\App\Http\Controllers\TrackingController::class, 'store'])->name('track.activity');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -53,8 +56,12 @@ Route::middleware('auth')->group(function () {
         Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)->except(['show']);
         Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show']);
         Route::put('orders/{order}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.status.update');
+        Route::put('orders/{order}/payment-status', [\App\Http\Controllers\Admin\OrderController::class, 'updatePaymentStatus'])->name('orders.payment_status.update');
         Route::get('orders/{order}/print', [\App\Http\Controllers\Admin\OrderController::class, 'print'])->name('orders.print');
         Route::delete('product-images/{image}', [\App\Http\Controllers\Admin\ProductController::class, 'deleteImage'])->name('products.image.destroy');
+        Route::resource('customers', \App\Http\Controllers\Admin\CustomerController::class)->only(['index', 'edit', 'update']);
+        Route::get('customers/{customer}/orders', [\App\Http\Controllers\Admin\CustomerController::class, 'orders'])->name('customers.orders');
+        Route::get('tracking', [\App\Http\Controllers\Admin\TrackingController::class, 'index'])->name('tracking.index');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -65,3 +72,7 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Google Social Login Routes
+Route::get('/auth/google', [\App\Http\Controllers\Auth\SocialLoginController::class, 'redirect'])->name('google.login');
+Route::get('/auth/google/callback', [\App\Http\Controllers\Auth\SocialLoginController::class, 'callback'])->name('google.callback');

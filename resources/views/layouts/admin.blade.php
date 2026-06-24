@@ -73,6 +73,11 @@
             flex: 1;
             padding: 1.5rem 1rem;
             overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+        .sidebar-menu::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
         }
 
         .menu-section {
@@ -457,14 +462,9 @@
             <a href="{{ route('admin.orders.index') }}" class="menu-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
                 <i class="fas fa-shopping-cart"></i> Orders
             </a>
-            <a href="#" class="menu-link">
-                <i class="fas fa-file-invoice-dollar"></i> Invoices
-            </a>
+        
 
             <div class="menu-section">Inventory</div>
-            <a href="#" class="menu-link">
-                <i class="fas fa-box"></i> Products
-            </a>
             <a href="{{ route('admin.categories.index') }}" class="menu-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
                 <i class="fas fa-tags"></i> Categories
             </a>
@@ -473,9 +473,6 @@
             </a>
             <a href="{{ route('admin.products.index') }}" class="menu-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
                 <i class="fas fa-box"></i> Products
-            </a>
-            <a href="{{ route('admin.brands.index') }}" class="menu-link {{ request()->routeIs('admin.brands.*') ? 'active' : '' }}">
-                <i class="fas fa-trademark"></i> Brands
             </a>
             <a href="{{ route('admin.banners.index') }}" class="menu-link {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}">
                 <i class="fas fa-images"></i> Banners
@@ -488,11 +485,14 @@
             </a>
 
             <div class="menu-section">Contacts</div>
-            <a href="#" class="menu-link">
+            <a href="{{ route('admin.customers.index') }}" class="menu-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}">
                 <i class="fas fa-users"></i> Customers
             </a>
 
             <div class="menu-section">Settings</div>
+            <a href="{{ route('admin.tracking.index') }}" class="menu-link {{ request()->routeIs('admin.tracking.*') ? 'active' : '' }}">
+                <i class="fas fa-chart-line"></i> Tracking Logs
+            </a>
             <a href="#" class="menu-link">
                 <i class="fas fa-cog"></i> Store Settings
             </a>

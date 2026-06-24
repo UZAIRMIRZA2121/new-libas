@@ -40,15 +40,20 @@ class CheckoutController extends Controller
         
         if ($appliedCoupon) {
             $coupon = Coupon::where('code', $appliedCoupon['code'])->first();
-            if ($coupon && !$coupon->is_used) {
-                // Verify email if necessary
-                if (!$coupon->email || strcasecmp($coupon->email, $request->email) === 0) {
-                    $discountAmount = ($subtotal * $coupon->discount_percentage) / 100;
-                    
-                    if ($coupon->email) {
-                        $coupon->update(['is_used' => true]);
-                    }
+            if ($coupon) {
+                // Check if already used
+                $alreadyUsed = false;
+                if (auth()->check()) {
+                    $alreadyUsed = \App\Models\CouponUsage::where('coupon_id', $coupon->id)->where('user_id', auth()->id())->exists();
+                } elseif ($request->email) {
+                    $alreadyUsed = \App\Models\CouponUsage::where('coupon_id', $coupon->id)->where('email', $request->email)->exists();
                 }
+
+                if ($alreadyUsed) {
+                    return back()->with('error', 'You have already used this coupon.');
+                }
+
+                $discountAmount = ($subtotal * $coupon->discount_percentage) / 100;
             }
         }
 
@@ -73,6 +78,18 @@ class CheckoutController extends Controller
             'total' => $total,
             'status' => 'pending',
         ]);
+
+        if ($appliedCoupon) {
+            $couponRecord = \App\Models\Coupon::where('code', $appliedCoupon['code'])->first();
+            if ($couponRecord) {
+                \App\Models\CouponUsage::create([
+                    'coupon_id' => $couponRecord->id,
+                    'user_id' => auth()->id(),
+                    'order_id' => $order->id,
+                    'email' => $request->email,
+                ]);
+            }
+        }
 
         foreach ($cart as $item) {
             $order->items()->create([
@@ -109,12 +126,16 @@ class CheckoutController extends Controller
             return response()->json(['success' => false, 'message' => 'Invalid coupon code.']);
         }
 
-        if ($coupon->is_used) {
-            return response()->json(['success' => false, 'message' => 'This coupon has already been used.']);
+        // Check usage
+        $alreadyUsed = false;
+        if (auth()->check()) {
+            $alreadyUsed = \App\Models\CouponUsage::where('coupon_id', $coupon->id)->where('user_id', auth()->id())->exists();
+        } elseif ($request->email) {
+            $alreadyUsed = \App\Models\CouponUsage::where('coupon_id', $coupon->id)->where('email', $request->email)->exists();
         }
 
-        if ($coupon->email && strcasecmp($coupon->email, $request->email) !== 0) {
-            return response()->json(['success' => false, 'message' => 'This coupon is not valid for your email address.']);
+        if ($alreadyUsed) {
+            return response()->json(['success' => false, 'message' => 'You have already used this coupon.']);
         }
 
         $cart = session('cart', []);

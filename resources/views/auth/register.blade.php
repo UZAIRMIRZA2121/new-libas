@@ -121,9 +121,19 @@
         </div>
 
         <button type="submit" class="btn-auth" style="margin-top: 1.5rem;">Create Account</button>
+        
+        <div style="text-align: center; margin: 1.5rem 0; position: relative;">
+            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #e2e8f0; z-index: 1;"></div>
+            <span style="position: relative; z-index: 2; background: white; padding: 0 10px; color: #64748b; font-size: 0.9rem;">or</span>
+        </div>
+
+        <a href="{{ route('google.login') }}" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 8px; color: #334155; text-decoration: none; font-weight: 600; transition: background 0.2s;">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style="width: 20px; height: 20px;">
+            Sign up with Google
+        </a>
     </form>
 
-    <div class="auth-footer">
+    <div class="auth-footer" style="margin-top: 2rem;">
         Already have an account? <a href="{{ route('login') }}">Log in here</a>
     </div>
 </div>

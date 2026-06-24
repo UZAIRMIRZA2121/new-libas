@@ -104,8 +104,8 @@
                     </div>
 
                     <div class="action-buttons" style="margin-top: 1.5rem;">
-                        <button type="submit" class="btn-outline-primary" style="display:inline-flex; align-items:center; border: 2px solid var(--primary-color); background:transparent; cursor:pointer;"><i class="fas fa-shopping-cart" style="margin-right:0.5rem;"></i> Add to Cart</button>
-                        <button type="button" class="btn-primary-large" onclick="document.forms[0].submit()" style="display:inline-flex; align-items:center; border:none; cursor:pointer;"><i class="fas fa-bolt" style="margin-right:0.5rem;"></i> Buy Now</button>
+                        <button type="submit" name="action" value="add_to_cart" class="btn-outline-primary" style="display:inline-flex; align-items:center; border: 2px solid var(--primary-color); background:transparent; cursor:pointer;"><i class="fas fa-shopping-cart" style="margin-right:0.5rem;"></i> Add to Cart</button>
+                        <button type="submit" name="action" value="buy_now" class="btn-primary-large" style="display:inline-flex; align-items:center; border:none; cursor:pointer;"><i class="fas fa-bolt" style="margin-right:0.5rem;"></i> Buy Now</button>
                     </div>
                     @endif
                 </form>

@@ -43,4 +43,15 @@ class OrderController extends Controller
         $order->load('items');
         return view('admin.orders.print', compact('order'));
     }
+
+    public function updatePaymentStatus(Request $request, Order $order)
+    {
+        $request->validate([
+            'payment_status' => 'required|in:unpaid,paid,failed,refunded'
+        ]);
+
+        $order->update(['payment_status' => $request->payment_status]);
+
+        return redirect()->back()->with('success', 'Payment status updated successfully.');
+    }
 }

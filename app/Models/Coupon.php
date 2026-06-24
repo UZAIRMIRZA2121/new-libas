@@ -10,9 +10,12 @@ class Coupon extends Model
     use HasFactory;
 
     protected $fillable = [
-        'email',
         'code',
         'discount_percentage',
-        'is_used',
     ];
+
+    public function usages()
+    {
+        return $this->hasMany(CouponUsage::class);
+    }
 }

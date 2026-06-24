@@ -12,7 +12,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('parent')->get();
+        $categories = Category::whereNull('parent_id')->with('children')->get();
         return view('admin.categories.index', compact('categories'));
     }
 

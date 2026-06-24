@@ -3,157 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice: {{ $order->order_number }}</title>
+    <title>Receipt: {{ $order->order_number }}</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            color: #333;
-            line-height: 1.5;
+            font-family: 'Courier New', Courier, monospace;
+            color: #000;
+            line-height: 1.2;
             margin: 0;
-            padding: 40px;
+            padding: 0;
+            background: #fff;
         }
-        .invoice-box {
-            max-width: 800px;
-            margin: auto;
-            padding: 30px;
-            border: 1px solid #eee;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-            font-size: 16px;
+        .receipt-box {
+            width: 80mm;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 5mm;
+            font-size: 15px;
         }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+        .text-center {
+            text-align: center;
         }
-        .header h1 {
-            margin: 0;
-            color: #4f46e5;
-        }
-        .details-grid {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 40px;
-        }
-        .details-col h3 {
-            margin-top: 0;
-            color: #555;
-            text-transform: uppercase;
-            font-size: 14px;
-        }
-        .details-col p {
-            margin: 5px 0;
-        }
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
-        .items-table th {
-            background: #f8fafc;
-            border-bottom: 2px solid #eee;
+        .text-left {
             text-align: left;
-            padding: 10px;
-        }
-        .items-table td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
         }
         .text-right {
             text-align: right;
         }
-        .totals {
-            width: 300px;
-            margin-left: auto;
+        .bold {
+            font-weight: bold;
         }
-        .totals-row {
+        h2 {
+            margin: 0 0 5px 0;
+            font-size: 24px;
+        }
+        p {
+            margin: 2px 0;
+        }
+        .divider {
+            border-bottom: 1px dashed #000;
+            margin: 8px 0;
+        }
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .items-table th {
+            border-bottom: 1px dashed #000;
+            padding-bottom: 5px;
+            font-weight: bold;
+        }
+        .items-table td {
+            padding: 4px 0;
+            vertical-align: top;
+        }
+        .item-name {
+            display: block;
+            margin-bottom: 2px;
+        }
+        .totals-grid {
             display: flex;
             justify-content: space-between;
-            padding: 5px 0;
-        }
-        .totals-row.grand-total {
-            border-top: 2px solid #eee;
-            margin-top: 10px;
-            padding-top: 10px;
-            font-weight: bold;
-            font-size: 1.2em;
+            margin-top: 2px;
         }
         @media print {
-            body { padding: 0; }
-            .invoice-box { box-shadow: none; border: none; }
+            body { margin: 0; padding: 0; }
+            @page {
+                margin: 0;
+                size: 80mm auto;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="invoice-box">
-        <div class="header">
-            <div>
-                <h1>INVOICE</h1>
-                <p>Order: <strong>{{ $order->order_number }}</strong><br>Date: {{ $order->created_at->format('M d, Y') }}</p>
-            </div>
-            <div class="text-right">
-                <h2 style="margin:0;">New Libas</h2>
-                <p>Wear Everywhere<br>support@newlibas.com</p>
-            </div>
+    <div class="receipt-box">
+        <div class="text-center">
+            <h2>NEW LIBAS</h2>
+            <p>Wear Everywhere</p>
+            <p>support@newlibas.com</p>
+            <div class="divider"></div>
+            <h3 style="margin: 5px 0; font-size: 18px;">SALES RECEIPT</h3>
+            <p>Order: <strong>{{ $order->order_number }}</strong></p>
+            <p>Date: {{ $order->created_at->format('M d, Y h:i A') }}</p>
         </div>
 
-        <div class="details-grid">
-            <div class="details-col">
-                <h3>Billed To (Customer Details)</h3>
-                <p><strong>{{ $order->first_name }} {{ $order->last_name }}</strong></p>
-                <p>{{ $order->email }}</p>
-                <p>{{ $order->phone }}</p>
-            </div>
-            <div class="details-col text-right">
-                <h3>Shipping Details</h3>
-                <p>{{ $order->address }}</p>
-                @if($order->apartment)<p>{{ $order->apartment }}</p>@endif
-                <p>{{ $order->city }}, {{ $order->postal_code }}</p>
-                
-                <h3 style="margin-top: 20px;">Payment Information</h3>
-                <p>Method: <strong>{{ $order->payment_method == 'cod' ? 'Cash on Delivery' : 'Credit/Debit Card' }}</strong></p>
-                <p>Status: <strong style="text-transform: capitalize;">{{ str_replace('_', ' ', $order->status) }}</strong></p>
-            </div>
+        <div class="divider"></div>
+
+        <div class="text-left">
+            <p class="bold">Billed To:</p>
+            <p>{{ $order->first_name }} {{ $order->last_name }}</p>
+            <p>{{ $order->phone }}</p>
+            <p>{{ $order->address }}</p>
+            @if($order->apartment)<p>{{ $order->apartment }}</p>@endif
+            <p>{{ $order->city }}, {{ $order->postal_code }}</p>
         </div>
+
+        <div class="divider"></div>
 
         <table class="items-table">
             <thead>
                 <tr>
-                    <th>Item Description</th>
-                    <th>Price</th>
-                    <th>Qty</th>
+                    <th class="text-left">Item</th>
+                    <th class="text-center">Qty</th>
                     <th class="text-right">Total</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($order->items as $item)
                 <tr>
-                    <td>
-                        <strong>{{ $item->product_name }}</strong>
-                        @if($item->color)<br><small>Color: {{ $item->color }}</small>@endif
+                    <td class="text-left" style="width: 60%;">
+                        <span class="item-name">{{ $item->product_name }}</span>
+                        @if($item->color)<small>Color: {{ $item->color }}</small><br>@endif
+                        <small>@ Rs.{{ number_format($item->price, 2) }}</small>
                     </td>
-                    <td>Rs.{{ number_format($item->price, 2) }}</td>
-                    <td>{{ $item->quantity }}</td>
-                    <td class="text-right">Rs.{{ number_format($item->price * $item->quantity, 2) }}</td>
+                    <td class="text-center" style="width: 15%;">{{ $item->quantity }}</td>
+                    <td class="text-right" style="width: 25%;">Rs.{{ number_format($item->price * $item->quantity, 2) }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
 
-        <div class="totals">
-            <div class="totals-row">
-                <span>Subtotal</span>
-                <span>Rs.{{ number_format($order->subtotal, 2) }}</span>
-            </div>
-            <div class="totals-row">
-                <span>Shipping</span>
-                <span>{{ $order->shipping == 0 ? 'Free' : 'Rs.' . number_format($order->shipping, 2) }}</span>
-            </div>
-            <div class="totals-row grand-total">
-                <span>Total Amount</span>
-                <span>Rs.{{ number_format($order->total, 2) }}</span>
-            </div>
+        <div class="divider"></div>
+
+        <div class="totals-grid">
+            <span>Subtotal:</span>
+            <span>Rs.{{ number_format($order->subtotal, 2) }}</span>
+        </div>
+        <div class="totals-grid">
+            <span>Shipping:</span>
+            <span>{{ $order->shipping == 0 ? 'Free' : 'Rs.' . number_format($order->shipping, 2) }}</span>
+        </div>
+        @if($order->discount_amount > 0)
+        <div class="totals-grid">
+            <span>Discount @if($order->coupon_code)<small>({{ $order->coupon_code }})</small>@endif:</span>
+            <span>-Rs.{{ number_format($order->discount_amount, 2) }}</span>
+        </div>
+        @endif
+        <div class="divider"></div>
+        <div class="totals-grid bold" style="font-size: 18px;">
+            <span>TOTAL:</span>
+            <span>Rs.{{ number_format($order->total, 2) }}</span>
+        </div>
+
+        <div class="divider"></div>
+        
+        <div class="text-center">
+            <p>Payment: {{ $order->payment_method == 'cod' ? 'Cash on Delivery' : 'Card' }}</p>
+            <p style="margin-top: 10px; font-size: 16px;" class="bold">THANK YOU FOR YOUR PURCHASE!</p>
+            <p style="font-size: 12px; margin-top: 5px;">* Please keep this receipt for your records *</p>
         </div>
     </div>
 

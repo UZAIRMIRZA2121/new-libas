@@ -225,7 +225,14 @@
 
     function closeCouponModal() {
         document.getElementById('welcomeCouponModal').classList.remove('show');
-        localStorage.setItem('welcomeCouponSeen', 'true');
+        
+        // If the user hasn't successfully submitted their email,
+        // show the modal again after 10 seconds.
+        if (!localStorage.getItem('welcomeCouponSeen')) {
+            setTimeout(() => {
+                document.getElementById('welcomeCouponModal').classList.add('show');
+            }, 10000);
+        }
     }
     
     function copyCouponCode() {
@@ -273,6 +280,10 @@
                 if(data.message) document.getElementById('successMsg').textContent = data.message;
                 if(data.code) document.getElementById('couponCodeDisplay').textContent = data.code;
                 localStorage.setItem('welcomeCouponSeen', 'true');
+                localStorage.setItem('tracking_user_email', email);
+                if (typeof trackEvent === 'function') {
+                    trackEvent('email_submit', 'Coupon Form Submit', email);
+                }
             } else {
                 errorMsg.textContent = data.message || "An error occurred.";
                 errorMsg.style.display = "block";
@@ -334,6 +345,59 @@
                 console.error('Error toggling wishlist:', error);
             });
         }
+    </script>
+    
+    <!-- Tracking System -->
+    <script>
+        function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        let trackingSessionId = localStorage.getItem('tracking_session_id');
+        if (!trackingSessionId) {
+            trackingSessionId = uuidv4();
+            localStorage.setItem('tracking_session_id', trackingSessionId);
+        }
+
+        function trackEvent(eventType, elementText = null, providedEmail = null) {
+            let email = providedEmail || localStorage.getItem('tracking_user_email') || null;
+            
+            fetch('{{ route("track.activity") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    session_id: trackingSessionId,
+                    event_type: eventType,
+                    url: window.location.href,
+                    element_text: elementText,
+                    email: email
+                })
+            }).catch(e => console.log('Tracking error', e));
+        }
+
+        // Track Page View
+        window.addEventListener('load', () => {
+            trackEvent('page_view');
+        });
+
+        // Track Clicks
+        document.body.addEventListener('click', (e) => {
+            let target = e.target.closest('a, button, input[type="submit"]');
+            if (target) {
+                let text = target.innerText || target.value || target.title || target.name || target.className || 'Unknown Element';
+                text = text.toString().trim().substring(0, 100);
+                if(text) {
+                    trackEvent('click', text);
+                }
+            }
+        });
     </script>
 </body>
 </html>
