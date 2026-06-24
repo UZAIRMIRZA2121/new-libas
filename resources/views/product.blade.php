@@ -24,9 +24,9 @@
                         @php $discount = round((($product->old_price - $product->price) / $product->old_price) * 100); @endphp
                         <span class="discount-badge">-{{ $discount }}% OFF</span>
                     @endif
-                    <button class="nav-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button type="button" class="nav-btn prev-btn" onclick="navigateGallery(-1)"><i class="fas fa-chevron-left"></i></button>
                     <img src="{{ $product->main_image_path ? asset('storage/' . $product->main_image_path) : 'https://placehold.co/800x800?text=No+Image' }}" alt="Main Image" class="main-img" id="main-product-image">
-                    <button class="nav-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                    <button type="button" class="nav-btn next-btn" onclick="navigateGallery(1)"><i class="fas fa-chevron-right"></i></button>
                 </div>
                 
                 @if($product->images->count() > 0)
@@ -140,6 +140,25 @@
         </div>
         
         <script>
+            let currentImageIndex = 0;
+            
+            function navigateGallery(direction) {
+                const thumbnails = document.querySelectorAll('.thumbnail');
+                if (thumbnails.length === 0) return;
+                
+                currentImageIndex += direction;
+                if (currentImageIndex < 0) currentImageIndex = thumbnails.length - 1;
+                if (currentImageIndex >= thumbnails.length) currentImageIndex = 0;
+                
+                const targetThumb = thumbnails[currentImageIndex];
+                const imgElement = targetThumb.querySelector('img');
+                if (imgElement) {
+                    document.getElementById('main-product-image').src = imgElement.src;
+                    thumbnails.forEach(t => t.classList.remove('active'));
+                    targetThumb.classList.add('active');
+                }
+            }
+
             function selectColor(name, btn) {
                 document.getElementById('selected-color-label').innerText = name;
                 document.getElementById('selected-color-input').value = name;
@@ -157,8 +176,13 @@
             }
             function changeImage(src, thumb) {
                 document.getElementById('main-product-image').src = src;
-                document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                const thumbnails = document.querySelectorAll('.thumbnail');
+                thumbnails.forEach(t => t.classList.remove('active'));
                 thumb.classList.add('active');
+                
+                thumbnails.forEach((t, index) => {
+                    if (t === thumb) currentImageIndex = index;
+                });
             }
         </script>
 

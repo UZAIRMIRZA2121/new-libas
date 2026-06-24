@@ -30,20 +30,20 @@
 
             <div class="header-actions">
                
-                <a href="{{ route('track.order') }}" class="action-link" style="color: var(--primary-color); font-weight: 600;"><i class="fas fa-truck"></i> Track Order</a>
+                <a href="{{ route('track.order') }}" class="action-link" style="color: var(--primary-color); font-weight: 600;"><i class="fas fa-truck"></i> <span class="hide-mobile">Track Order</span></a>
                 @auth
                     @if(Auth::user()->isAdmin())
-                        <a href="{{ route('admin.dashboard') }}" class="action-link"><i class="fas fa-shield-alt"></i> Admin</a>
+                        <a href="{{ route('admin.dashboard') }}" class="action-link"><i class="fas fa-shield-alt"></i> <span class="hide-mobile">Admin</span></a>
                     @else
-                        <a href="{{ route('customer.orders') }}" class="action-link"><i class="far fa-user"></i> Orders</a>
+                        <a href="{{ route('customer.orders') }}" class="action-link"><i class="far fa-user"></i> <span class="hide-mobile">Orders</span></a>
                     @endif
                     <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                         @csrf
-                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="action-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="action-link"><i class="fas fa-sign-out-alt"></i> <span class="hide-mobile">Logout</span></a>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="action-link"><i class="far fa-user"></i> Sign in</a>
-                    <a href="{{ route('register') }}" class="action-link"><i class="fas fa-user-plus"></i> Register</a>
+                    <a href="{{ route('login') }}" class="action-link"><i class="far fa-user"></i> <span class="hide-mobile">Sign in</span></a>
+                    <a href="{{ route('register') }}" class="action-link"><i class="fas fa-user-plus"></i> <span class="hide-mobile">Register</span></a>
                 @endauth
                 <a href="{{ url('/cart') }}" class="action-cart">
                     <i class="fas fa-shopping-cart"></i>

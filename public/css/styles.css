@@ -23,6 +23,11 @@
     font-family: 'Outfit', sans-serif;
 }
 
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
@@ -1874,6 +1879,9 @@ ul {
 
 /* Responsive Global Styles */
 @media (max-width: 992px) {
+    html {
+        font-size: 15px;
+    }
     .product-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -1895,6 +1903,9 @@ ul {
 }
 
 @media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
     .header-main {
         flex-wrap: wrap;
         gap: 0;
@@ -1940,18 +1951,41 @@ ul {
     .footer-grid {
         grid-template-columns: 1fr;
     }
+    .product-details-wrap {
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+    .thumbnail-list {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .hide-mobile {
+        display: none !important;
+    }
 }
 
 @media (max-width: 576px) {
+    html {
+        font-size: 13px;
+    }
     .product-grid, .deals-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
     }
-    .header-actions {
-        justify-content: center;
-        margin-top: 0.5rem;
+    .product-image {
+        height: 180px;
     }
-    .logo {
-        text-align: center;
+    .product-info {
+        padding: 0.8rem;
+    }
+    .product-title {
+        font-size: 0.85rem;
+    }
+    .current-price {
+        font-size: 0.95rem;
+    }
+    .old-price {
+        font-size: 0.8rem;
     }
     .section-title {
         font-size: 1.2rem;
@@ -1969,7 +2003,7 @@ ul {
         text-align: center;
     }
     .main-image-container {
-        height: 300px;
+        height: auto;
     }
     .thumbnail {
         width: 60px;
@@ -1977,5 +2011,11 @@ ul {
     }
     .action-buttons {
         flex-direction: column;
+    }
+    .product-title-large {
+        font-size: 1.4rem;
+    }
+    .product-price-large .current {
+        font-size: 1.5rem;
     }
 }
