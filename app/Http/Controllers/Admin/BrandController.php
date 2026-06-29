@@ -98,4 +98,16 @@ class BrandController extends Controller
 
         return redirect()->route('admin.brands.index')->with('success', 'Brand deleted successfully.');
     }
+
+    public function toggleStatus(Brand $brand)
+    {
+        $brand->is_active = !$brand->is_active;
+        $brand->save();
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $brand->is_active,
+            'message' => 'Status updated successfully'
+        ]);
+    }
 }

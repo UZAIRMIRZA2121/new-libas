@@ -12,10 +12,20 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['category', 'brand'])->latest()->get();
-        return view('admin.products.index', compact('products'));
+        $query = Product::with(['category', 'brand'])->latest();
+        $search = $request->search ?? '';
+        
+        if (!empty($search)) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('sku', 'like', "%{$search}%");
+            });
+        }
+        
+        $products = $query->get();
+        return view('admin.products.index', compact('products', 'search'));
     }
 
     public function create()
@@ -31,7 +41,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'old_price' => 'nullable|numeric|min:0',
-            'sku' => 'nullable|string|unique:products,sku',
+            'sku' => 'nullable|string',
             'stock' => 'required|integer|min:0',
             'category_id' => 'nullable|exists:categories,id',
             'brand_id' => 'nullable|exists:brands,id',
@@ -109,7 +119,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'old_price' => 'nullable|numeric|min:0',
-            'sku' => 'nullable|string|unique:products,sku,' . $product->id,
+            'sku' => 'nullable|string',
             'stock' => 'required|integer|min:0',
             'category_id' => 'nullable|exists:categories,id',
             'brand_id' => 'nullable|exists:brands,id',
@@ -213,5 +223,51 @@ class ProductController extends Controller
         $image->delete();
 
         return response()->json(['success' => true, 'message' => 'Image deleted successfully']);
+    }
+
+    public function toggleStatus(Product $product)
+    {
+        $product->update(['is_active' => !$product->is_active]);
+        return response()->json(['success' => true, 'is_active' => $product->is_active]);
+    }
+
+    public function toggleFeatured(Product $product)
+    {
+        $product->update(['is_featured' => !$product->is_featured]);
+        return response()->json(['success' => true, 'is_featured' => $product->is_featured]);
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:products,id'
+        ]);
+
+        $products = Product::whereIn('id', $request->ids)->get();
+        foreach ($products as $product) {
+            if ($product->main_image_path) {
+                Storage::disk('public')->delete($product->main_image_path);
+            }
+            foreach ($product->images as $img) {
+                Storage::disk('public')->delete($img->image_path);
+            }
+            $product->delete();
+        }
+
+        return response()->json(['success' => true, 'message' => 'Selected products deleted successfully']);
+    }
+
+    public function bulkUpdateSku(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:products,id',
+            'sku' => 'nullable|string'
+        ]);
+
+        Product::whereIn('id', $request->ids)->update(['sku' => $request->sku]);
+
+        return response()->json(['success' => true, 'message' => 'SKUs updated successfully']);
     }
 }

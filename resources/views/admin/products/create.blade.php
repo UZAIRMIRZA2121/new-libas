@@ -74,12 +74,15 @@
 
                 <div style="margin-bottom: 1.5rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
                     <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Product Colors (Optional)</label>
-                    @for($i=0; $i<3; $i++)
-                        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
-                            <input type="text" name="color_names[]" placeholder="Color Name (e.g. Pink)" style="flex: 1; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 4px;">
-                            <input type="color" name="color_hexes[]" style="width: 50px; height: 38px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
-                        </div>
-                    @endfor
+                    <div id="colors-container">
+                        @for($i=0; $i<3; $i++)
+                            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <input type="text" name="color_names[]" placeholder="Color Name (e.g. Pink)" style="flex: 1; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                                <input type="color" name="color_hexes[]" style="width: 50px; height: 38px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
+                            </div>
+                        @endfor
+                    </div>
+                    <button type="button" onclick="addColorRow()" style="margin-top: 0.5rem; background: #e2e8f0; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">+ Add More Colors</button>
                 </div>
 
                 <div style="margin-bottom: 1.5rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
@@ -106,6 +109,19 @@
                         row.innerHTML = `
                             <input type="text" name="spec_keys[]" placeholder="Key" style="flex: 1; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 4px;">
                             <input type="text" name="spec_values[]" placeholder="Value" style="flex: 2; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                        `;
+                        container.appendChild(row);
+                    }
+
+                    function addColorRow() {
+                        const container = document.getElementById('colors-container');
+                        const row = document.createElement('div');
+                        row.style.display = 'flex';
+                        row.style.gap = '0.5rem';
+                        row.style.marginBottom = '0.5rem';
+                        row.innerHTML = `
+                            <input type="text" name="color_names[]" placeholder="Color Name (e.g. Pink)" style="flex: 1; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                            <input type="color" name="color_hexes[]" value="#000000" style="width: 50px; height: 38px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
                         `;
                         container.appendChild(row);
                     }

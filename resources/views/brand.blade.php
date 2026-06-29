@@ -61,14 +61,14 @@
         <!-- Products Grid (Dense 6-Column Layout) -->
         <div class="product-grid grid-6-cols">
             @forelse($products as $product)
-            <div class="product-card">
+            <div class="product-card" onclick="window.location='{{ route('product.show', $product->slug) }}'" style="cursor: pointer;">
                 <div class="product-image">
                     @if($product->old_price && $product->old_price > $product->price)
                         @php $discount = round((($product->old_price - $product->price) / $product->old_price) * 100); @endphp
                         <span class="discount-badge">-{{ $discount }}%</span>
                     @endif
                     <img src="{{ $product->main_image_path ? asset('storage/' . $product->main_image_path) : 'https://placehold.co/400x400?text=No+Image' }}" alt="{{ $product->name }}">
-                    <button class="wishlist-btn" onclick="toggleWishlist({{ $product->id }}, this)"><i class="{{ in_array($product->id, $wishlistIds) ? 'fas fa-heart' : 'far fa-heart' }}" {!! in_array($product->id, $wishlistIds) ? 'style="color: #ef4444;"' : '' !!}></i></button>
+                    <button class="wishlist-btn" onclick="event.stopPropagation(); toggleWishlist({{ $product->id }}, this)"><i class="{{ in_array($product->id, $wishlistIds) ? 'fas fa-heart' : 'far fa-heart' }}" {!! in_array($product->id, $wishlistIds) ? 'style="color: #ef4444;"' : '' !!}></i></button>
                 </div>
                 <div class="product-info">
                     <h4 class="product-title"><a href="{{ route('product.show', $product->slug) }}" style="text-decoration: none; color: inherit;">{{ \Illuminate\Support\Str::limit($product->name, 40) }}</a></h4>

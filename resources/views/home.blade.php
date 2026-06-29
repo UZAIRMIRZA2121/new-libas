@@ -117,20 +117,37 @@
         <!-- Deals of the Day -->
         <section class="section deals-section">
             <div class="section-header">
-                <h2 class="section-title">Deals of the Day <span class="timer">Ends in 05:40:00</span></h2>
+                <h2 class="section-title">Deals of the Day <span class="timer" id="deal-timer">Ends in 00:00:00</span></h2>
                 <a href="{{ url('/category') }}" class="view-all">View All</a>
             </div>
+            <script>
+                function updateDealTimer() {
+                    const now = new Date();
+                    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+                    const diff = endOfDay - now;
+                    if (diff <= 0) {
+                        document.getElementById('deal-timer').innerText = 'Ended';
+                        return;
+                    }
+                    const h = Math.floor(diff / (1000 * 60 * 60)).toString().padStart(2, '0');
+                    const m = Math.floor((diff / 1000 / 60) % 60).toString().padStart(2, '0');
+                    const s = Math.floor((diff / 1000) % 60).toString().padStart(2, '0');
+                    document.getElementById('deal-timer').innerText = `Ends in ${h}:${m}:${s}`;
+                }
+                updateDealTimer();
+                setInterval(updateDealTimer, 1000);
+            </script>
             <div class="product-grid deals-grid">
                 @forelse($featuredProducts as $product)
                 <!-- Product Card -->
-                <div class="product-card">
+                <div class="product-card" onclick="window.location='{{ route('product.show', $product->slug) }}'" style="cursor: pointer;">
                     <div class="product-image">
                         @if($product->old_price && $product->old_price > $product->price)
                             @php $discount = round((($product->old_price - $product->price) / $product->old_price) * 100); @endphp
                             <span class="discount-badge">-{{ $discount }}%</span>
                         @endif
                         <img src="{{ $product->main_image_path ? asset('storage/' . $product->main_image_path) : 'https://placehold.co/400x400?text=No+Image' }}" alt="{{ $product->name }}">
-                        <button class="wishlist-btn" onclick="toggleWishlist({{ $product->id }}, this)"><i class="{{ in_array($product->id, $wishlistIds) ? 'fas fa-heart' : 'far fa-heart' }}" {!! in_array($product->id, $wishlistIds) ? 'style="color: #ef4444;"' : '' !!}></i></button>
+                        <button class="wishlist-btn" onclick="event.stopPropagation(); toggleWishlist({{ $product->id }}, this)"><i class="{{ in_array($product->id, $wishlistIds) ? 'fas fa-heart' : 'far fa-heart' }}" {!! in_array($product->id, $wishlistIds) ? 'style="color: #ef4444;"' : '' !!}></i></button>
                     </div>
                     <div class="product-info">
                         <h4 class="product-title"><a href="{{ route('product.show', $product->slug) }}" style="text-decoration: none; color: inherit;">{{ \Illuminate\Support\Str::limit($product->name, 40) }}</a></h4>
@@ -166,14 +183,14 @@
             <div class="product-grid">
                 @forelse($recommendedProducts as $product)
                 <!-- Product Card -->
-                <div class="product-card">
+                <div class="product-card" onclick="window.location='{{ route('product.show', $product->slug) }}'" style="cursor: pointer;">
                     <div class="product-image">
                         @if($product->old_price && $product->old_price > $product->price)
                             @php $discount = round((($product->old_price - $product->price) / $product->old_price) * 100); @endphp
                             <span class="discount-badge">-{{ $discount }}%</span>
                         @endif
                         <img src="{{ $product->main_image_path ? asset('storage/' . $product->main_image_path) : 'https://placehold.co/400x400?text=No+Image' }}" alt="{{ $product->name }}">
-                        <button class="wishlist-btn" onclick="toggleWishlist({{ $product->id }}, this)"><i class="{{ in_array($product->id, $wishlistIds) ? 'fas fa-heart' : 'far fa-heart' }}" {!! in_array($product->id, $wishlistIds) ? 'style="color: #ef4444;"' : '' !!}></i></button>
+                        <button class="wishlist-btn" onclick="event.stopPropagation(); toggleWishlist({{ $product->id }}, this)"><i class="{{ in_array($product->id, $wishlistIds) ? 'fas fa-heart' : 'far fa-heart' }}" {!! in_array($product->id, $wishlistIds) ? 'style="color: #ef4444;"' : '' !!}></i></button>
                     </div>
                     <div class="product-info">
                         <h4 class="product-title"><a href="{{ route('product.show', $product->slug) }}" style="text-decoration: none; color: inherit;">{{ \Illuminate\Support\Str::limit($product->name, 40) }}</a></h4>

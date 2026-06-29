@@ -58,6 +58,13 @@ Route::middleware('auth')->group(function () {
         Route::put('orders/{order}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.status.update');
         Route::put('orders/{order}/payment-status', [\App\Http\Controllers\Admin\OrderController::class, 'updatePaymentStatus'])->name('orders.payment_status.update');
         Route::get('orders/{order}/print', [\App\Http\Controllers\Admin\OrderController::class, 'print'])->name('orders.print');
+        Route::post('categories/{category}/toggle-status', [\App\Http\Controllers\Admin\CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
+        Route::post('brands/{brand}/toggle-status', [\App\Http\Controllers\Admin\BrandController::class, 'toggleStatus'])->name('brands.toggle-status');
+        Route::post('banners/{banner}/toggle-status', [\App\Http\Controllers\Admin\BannerController::class, 'toggleStatus'])->name('banners.toggle-status');
+        Route::post('products/bulk-delete', [\App\Http\Controllers\Admin\ProductController::class, 'bulkDelete'])->name('products.bulk-delete');
+        Route::post('products/bulk-update-sku', [\App\Http\Controllers\Admin\ProductController::class, 'bulkUpdateSku'])->name('products.bulk-update-sku');
+        Route::post('products/{product}/toggle-status', [\App\Http\Controllers\Admin\ProductController::class, 'toggleStatus'])->name('products.toggle-status');
+        Route::post('products/{product}/toggle-featured', [\App\Http\Controllers\Admin\ProductController::class, 'toggleFeatured'])->name('products.toggle-featured');
         Route::delete('product-images/{image}', [\App\Http\Controllers\Admin\ProductController::class, 'deleteImage'])->name('products.image.destroy');
         Route::resource('customers', \App\Http\Controllers\Admin\CustomerController::class)->only(['index', 'edit', 'update']);
         Route::get('customers/{customer}/orders', [\App\Http\Controllers\Admin\CustomerController::class, 'orders'])->name('customers.orders');

@@ -72,9 +72,12 @@
                     <div class="product-color">
                         <span class="label">Color: <strong id="selected-color-label">Select a color</strong></span>
                         <input type="hidden" name="color" id="selected-color-input" required>
-                        <div class="color-options">
+                        <div class="color-options" style="flex-wrap: wrap;">
                             @foreach($product->colors as $color)
-                                <button type="button" class="color-btn" style="background-color: {{ $color->hex_code }};" title="{{ $color->name }}" onclick="selectColor('{{ $color->name }}', this)"></button>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer;" onclick="selectColor('{{ $color->name }}', this.querySelector('.color-btn'))">
+                                    <button type="button" class="color-btn" style="background-color: {{ $color->hex_code }}; pointer-events: none;" title="{{ $color->name }}"></button>
+                                    <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-main);">{{ $color->name }}</span>
+                                </div>
                             @endforeach
                         </div>
                     </div>
@@ -228,14 +231,14 @@
             <div class="product-grid deals-grid">
                 @forelse($recommendedProducts as $recProduct)
                 <!-- Card -->
-                <div class="product-card">
+                <div class="product-card" onclick="window.location='{{ route('product.show', $recProduct->slug) }}'" style="cursor: pointer;">
                     <div class="product-image">
                         @if($recProduct->old_price && $recProduct->old_price > $recProduct->price)
                             @php $discount = round((($recProduct->old_price - $recProduct->price) / $recProduct->old_price) * 100); @endphp
                             <span class="discount-badge">-{{ $discount }}% OFF</span>
                         @endif
                         <img src="{{ $recProduct->main_image_path ? asset('storage/' . $recProduct->main_image_path) : 'https://placehold.co/400x400?text=No+Image' }}" alt="{{ $recProduct->name }}">
-                        <button class="wishlist-btn" onclick="toggleWishlist({{ $recProduct->id }}, this)"><i class="{{ in_array($recProduct->id, $wishlistIds) ? 'fas fa-heart' : 'far fa-heart' }}" {!! in_array($recProduct->id, $wishlistIds) ? 'style="color: #ef4444;"' : '' !!}></i></button>
+                        <button class="wishlist-btn" onclick="event.stopPropagation(); toggleWishlist({{ $recProduct->id }}, this)"><i class="{{ in_array($recProduct->id, $wishlistIds) ? 'fas fa-heart' : 'far fa-heart' }}" {!! in_array($recProduct->id, $wishlistIds) ? 'style="color: #ef4444;"' : '' !!}></i></button>
                     </div>
                     <div class="product-info">
                         <h4 class="product-title"><a href="{{ route('product.show', $recProduct->slug) }}" style="text-decoration: none; color: inherit;">{{ \Illuminate\Support\Str::limit($recProduct->name, 40) }}</a></h4>

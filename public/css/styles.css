@@ -248,8 +248,8 @@ ul {
 /* Category Section */
 .category-list {
     display: flex;
-    justify-content: space-between;
-    gap: 1rem;
+    justify-content: flex-start;
+    gap: 2rem;
     overflow-x: auto;
     padding: 1rem;
 }

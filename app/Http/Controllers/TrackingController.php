@@ -10,6 +10,9 @@ class TrackingController extends Controller
 {
     public function store(Request $request)
     {
+        // Tracking disabled temporarily as requested
+        return response()->json(['status' => 'success']);
+        
         $validated = $request->validate([
             'session_id' => 'required|string',
             'event_type' => 'required|string',
